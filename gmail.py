@@ -24,13 +24,13 @@ logging.basicConfig(
 def send_email():
     try:
         Email = os.getenv("EMAIL_USER")
-        Password = os.getenv("EMAIL_PASSWORD")
+        Password = os.getenv("EMAIL_PASS")
         Recipient = os.getenv("EMAIL_TO")
         subject = "Where is your DISCIPLINE??"
         body = "You forgot you have to become the strongest and richest person in the entire bloodline of your family.!!! Stop being a pussy and get back to work!!"
 
         if not Email or not Password or not Recipient:
-            raise ValueError("EMAIL_USER, EMAIL_PASSWORD, and EMAIL_TO environment variables must be set.")
+            raise ValueError("EMAIL_USER, EMAIL_PASS, and EMAIL_TO environment variables must be set.")
 
         msg = MIMEText(body)
         msg['From'] = Email
