@@ -1,32 +1,54 @@
 import smtplib
 import os
+from dotenv import load_dotenv
+import logging
+from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-EMAIL = os.environ.get("EMAIL_USER")
-PASSWORD = os.environ.get("EMAIL_PASS")
-TO = os.environ.get("EMAIL_TO")
+load_dotenv()
 
-if EMAIL is None or PASSWORD is None or TO is None:
-    raise ValueError("EMAIL_USER, EMAIL_PASS, and EMAIL_TO environment variables must be set.")
+log_folder = "logs"
+os.makedirs(log_folder, exist_ok=True)
 
-subject = "Automated Email"
-body = "This is a test email sent automatically from GitHub Actions!"
+log_file= os.path.join(log_folder,"email_log.log")
 
-msg = MIMEMultipart()
-msg['From'] = EMAIL
-msg['To'] = TO
-msg['Subject'] = subject
+logging.basicConfig(
+    filename=log_file,
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
-msg.attach(MIMEText(body, 'plain'))
 
-try:
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(EMAIL, PASSWORD)
-    server.send_message(msg)
-    print("✅ Email sent successfully.")
-except Exception as e:
-    print(f"❌ Failed to send email: {e}")
-finally:
-    server.quit()
+
+def send_email():
+    try:
+        Email = os.getenv("EMAIL_USER")
+        Password = os.getenv("EMAIL_PASSWORD")
+        Recipient = os.getenv("EMAIL_TO")
+        subject = "Where is your DISCIPLINE??"
+        body = "You forgot you have to become the strongest and richest person in the entire bloodline of your family.!!! Stop being a pussy and get back to work!!"
+
+        if not Email or not Password or not Recipient:
+            raise ValueError("EMAIL_USER, EMAIL_PASSWORD, and EMAIL_TO environment variables must be set.")
+
+        msg = MIMEText(body)
+        msg['From'] = Email
+        msg['To'] = Recipient
+        msg['Subject'] = subject
+
+
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
+            server.login(Email, Password)
+            server.send_message(msg)
+
+        logging.info(f"Email sent successfully to {Recipient} at {datetime.now()}")
+    
+    except Exception as e:
+        logging.error(f"Failed to send email to {Recipient} at {datetime.now()}: {e}")
+        raise
+
+if __name__ == "__main__":
+    logging.info("===script-started===")
+    send_email()
+    logging.info("===script-finished===")
