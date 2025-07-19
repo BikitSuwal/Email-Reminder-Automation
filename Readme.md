@@ -38,7 +38,7 @@ Email-Reminder-Automation/
 * Connect to APIs (e.g., quote or weather)
 * Add logging and retry logic
 
-![Email Automation Status](https://github.com/<BikitSuwal>/<Email-Reminder-Automation>/actions/workflows/<workflow-name>.yml/badge.svg)
+![Email Automation Status](https://github.com/BikitSuwal/Email-Reminder-Automation/actions/workflows/email.yml/badge.svg)
 
 ---
 
